@@ -1,6 +1,7 @@
 import * as Collapsible from '@radix-ui/react-collapsible';
 import { ChevronDown } from "lucide-react";
 import { Lesson } from "./Lesson";
+import { useAppSelector } from '../store';
 
 type ModuleProps = {
   moduleIndex: number;
@@ -13,6 +14,9 @@ export function Module({
   moduleIndex,
   amountOfLessons,
 }: ModuleProps) {
+  const lessons = useAppSelector((state) => {
+    return state.player.course.modules[moduleIndex].lessons
+  })
   return (
     <Collapsible.Root className="group">
       <Collapsible.Trigger className="flex w-full items-center gap-3 bg-zinc-800 p-4">
@@ -31,9 +35,13 @@ export function Module({
 
       <Collapsible.Content>
         <nav className="relative flex flex-col gap-4 p-6">
-          <Lesson title="Fundamentios do Redux" duration="9:12" />
-          <Lesson title="Fundamentios do Redux" duration="9:12" />
-          <Lesson title="Fundamentios do Redux" duration="9:12" />
+          {
+            lessons.map(lesson => {
+              return (
+                <Lesson key={lesson.id} title={lesson.title} duration={lesson.duration} />
+              )
+            })
+          }
         </nav>
       </Collapsible.Content>
     </Collapsible.Root>
